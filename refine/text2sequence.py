@@ -20,7 +20,8 @@ with io.open('/Users/KYD/Dropbox/논문/MSCOCO/captions_train-val2014/annotation
             if item[1] == 'FW' or item[1] == 'JJ' or item[1] == 'NN'\
                 or item[1] == 'NNS' or item[1] == 'NNP' or item[1] == 'NNPS'\
                 or item[1] == 'VB' or item[1] == 'VBD' or item[1] == 'VBG'\
-                or item[1] == 'VBN' or item[1] == 'VBP' or item[1] == 'VBZ':
+                or item[1] == 'VBN' or item[1] == 'VBP' or item[1] == 'VBZ'\
+                or item[1] == 'JJR' or item[1] == 'JJS':
                 refined_tag.append(item)
 
         postagged_caption_list.append(refined_tag)
