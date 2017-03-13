@@ -25,6 +25,7 @@ with io.open('/Users/KYD/Dropbox/논문/MSCOCO/captions_train-val2014/annotation
 
         postagged_caption_list.append(refined_tag)
 
+
     caption_list.clear()
     for i in len(annotation):
         annotation[i]['caption'] = postagged_caption_list[i]
