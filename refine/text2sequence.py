@@ -21,10 +21,14 @@ with io.open('/Users/KYD/Dropbox/논문/MSCOCO/captions_train-val2014/annotation
                 or item[1] == 'NNS' or item[1] == 'NNP' or item[1] == 'NNPS'\
                 or item[1] == 'VB' or item[1] == 'VBD' or item[1] == 'VBG'\
                 or item[1] == 'VBN' or item[1] == 'VBP' or item[1] == 'VBZ':
-                refined_tag.append(item)
+                refined_tag.append(item[0])
 
         postagged_caption_list.append(refined_tag)
 
-    with io.open('/Users/KYD/Dropbox/논문/MSCOCO/captions_train-val2014/annotations/nltk_test.json', 'w') as ff:
+    caption_list.clear()
+    for i in len(annotation):
+        annotation[i]['caption'] = postagged_caption_list[i]
+
+    with io.open('/Users/KYD/Dropbox/논문/MSCOCO/captions_train-val2014/annotations/caption_test.json', 'w') as ff:
         json_result = json.dumps(postagged_caption_list)
         ff.write(json_result)
