@@ -41,3 +41,7 @@ with io.open('/Users/KYD/Dropbox/논문/MSCOCO/captions_train-val2014/annotation
     with io.open('/Users/KYD/Dropbox/논문/MSCOCO/captions_train-val2014/annotations/caption_test.json', 'w') as ff:
         json_result = json.dumps(annotation)
         ff.write(json_result)
+
+    with io.open('/Users/KYD/Dropbox/논문/MSCOCO/captions_train-val2014/annotations/nltk_test.json', 'w') as ff:
+        json_result = json.dumps(postagged_caption_list)
+        ff.write(json_result)
