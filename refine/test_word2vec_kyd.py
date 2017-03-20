@@ -2,7 +2,6 @@ import json
 import io
 from gensim import corpora
 
-# 파일로부터 text, dictionary 호출
 # skip-gram 모델 만들기
 # batch-set 만들기
 # 임베딩테이블 만들기
