@@ -3,7 +3,7 @@ import io
 import json
 import gensim
 
-with io.open('/Users/KYD/Dropbox/논문/MSCOCO/captions_train-val2014/annotations/val_test.json', 'r') as f:
+with io.open('/Users/shingyeong-eun/Dropbox/논문/MSCOCO/captions_train-val2014/annotations/val_test.json', 'r') as f:
     annotation = json.loads(f.read())
     caption_list = []
     for elem in annotation:
@@ -29,7 +29,7 @@ with io.open('/Users/KYD/Dropbox/논문/MSCOCO/captions_train-val2014/annotation
                         or item[0] == 'become' or item[0] == 'becomes' or item[0] == 'done'
                         or item[0] == 'became' or item[0] == 'been' or item[0] == 'am'
                         or item[0] == 'had' or item[0] == 'does'):
-                    refined_tag.append(item[0])
+                    refined_tag.append(item[0].lower())
 
         postagged_caption_list.append(refined_tag)
 
@@ -44,6 +44,6 @@ with io.open('/Users/KYD/Dropbox/논문/MSCOCO/captions_train-val2014/annotation
         ff.write(json_result)
     '''
 
-    with io.open('/Users/KYD/Dropbox/논문/MSCOCO/captions_train-val2014/annotations/nltk_test.json', 'w') as ff:
+    with io.open('/Users/shingyeong-eun/Dropbox/논문/MSCOCO/captions_train-val2014/annotations/nltk_test.json', 'w') as ff:
         json_result = json.dumps(postagged_caption_list)
         ff.write(json_result)
