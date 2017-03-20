@@ -13,6 +13,14 @@ with io.open('/Users/KYD/Dropbox/논문/MSCOCO/captions_train-val2014/annotation
     texts = [[token for token in text if frequency[token] > 1]
              for text in texts]
 
+    rdic = []
+    for k in frequency.keys():
+        if frequency[k] > 1:
+            rdic.append(k)
+
+    dic = dict()
+    for i, w in enumerate(rdic):
+        dic[w] = i
 
     dictionary = corpora.Dictionary(texts)
     dictionary.save('/Users/KYD/Dropbox/논문/MSCOCO/captions_train-val2014/annotations/dict_test.dict')
