@@ -3,7 +3,8 @@ import io
 import json
 import gensim
 
-with io.open('/Users/shingyeong-eun/Dropbox/논문/MSCOCO/captions_train-val2014/annotations/val_test.json', 'r') as f:
+with io.open('/Users/shingyeong-eun/Dropbox/논문/MSCOCO/captions_train-val2014/annotations/img_metadata_for_val.json',
+             'r') as f:
     annotation = json.loads(f.read())
     caption_list = []
     for elem in annotation:
@@ -39,11 +40,12 @@ with io.open('/Users/shingyeong-eun/Dropbox/논문/MSCOCO/captions_train-val2014
         annotation[i]['caption'] = postagged_caption_list[i]
 
     '''
-    with io.open('/Users/KYD/Dropbox/논문/MSCOCO/captions_train-val2014/annotations/caption_test.json', 'w') as ff:
+    with io.open('/Users/KYD/Dropbox/논문/MSCOCO/captions_train-val2014/annotations/img_metadata_with_tokenized_caption.json',
+     'w') as ff:
         json_result = json.dumps(annotation)
         ff.write(json_result)
     '''
 
-    with io.open('/Users/shingyeong-eun/Dropbox/논문/MSCOCO/captions_train-val2014/annotations/nltk_test.json', 'w') as ff:
+    with io.open('/Users/shingyeong-eun/Dropbox/논문/MSCOCO/captions_train-val2014/annotations/tokenized_caption.json', 'w') as ff:
         json_result = json.dumps(postagged_caption_list)
         ff.write(json_result)

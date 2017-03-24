@@ -10,9 +10,9 @@ from gensim import corpora
 dic = dict()
 rdic = []
 
-with io.open('/Users/KYD/Dropbox/논문/MSCOCO/captions_train-val2014/annotations/dict.json', 'r') as f:
+with io.open('/Users/KYD/Dropbox/논문/MSCOCO/captions_train-val2014/annotations/word_to_index_dict.json', 'r') as f:
     dic = json.loads(f.read())
 
-with io.open('/Users/KYD/Dropbox/논문/MSCOCO/captions_train-val2014/annotations/rdict.json', 'r') as f:
+with io.open('/Users/KYD/Dropbox/논문/MSCOCO/captions_train-val2014/annotations/index_to_word_list.json', 'r') as f:
     rdic = json.loads(f.read())
 
