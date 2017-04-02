@@ -56,7 +56,7 @@ for sequence in index_data:
 
 batch_size = 10
 step_size = 100
-embedding_size = 2
+embedding_size = 3
 neg_sample_size = 10
 voc_size = len(dic)
 X = tf.placeholder(shape=[batch_size], dtype=tf.int32)
@@ -86,8 +86,8 @@ with tf.Session() as sess:
     trained_embeddings = embedding_table.eval()
 
 # Show word2vec if dim is 2
-if trained_embeddings.shape[1] == 2:
-    labels = rdic[:10] # Show top 10 words
+if trained_embeddings.shape[1] == 3:
+    labels = rdic[:50] # Show top 10 words
     for i, label in enumerate(labels):
         x, y = trained_embeddings[i,:]
         plt.scatter(x, y)
