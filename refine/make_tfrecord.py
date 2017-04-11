@@ -10,8 +10,8 @@ from datetime import datetime
 
 from collections import Counter
 from collections import namedtuple
-
-tf.flags.DEFINE_integer("train_shards", 256,
+#recommened train_shards: 256
+tf.flags.DEFINE_integer("train_shards", 1,
                         "Number of shards in training TFRecord files.")
 tf.flags.DEFINE_integer("val_shards", 4,
                         "Number of shards in validation TFRecord files.")
@@ -19,8 +19,8 @@ tf.flags.DEFINE_integer("test_shards", 8,
                         "Number of shards in testing TFRecord files.")
 tf.flags.DEFINE_integer("num_threads", 4,
                         "Number of threads to preprocess the images.")
-tf.flags.DEFINE_string("output_dir", "/Users/KYD/Dropbox/논문/MSCOCO/captions_train-val2014/tfrecord", "Output data directory.")
-tf.flags.DEFINE_string("train_image_dir", "/Users/KYD/Dropbox/논문/MSCOCO/captions_train-val2014/sample_img/1000_collected_train2014",
+tf.flags.DEFINE_string("output_dir", "/Users/KYD/Downloads/tfrecord", "Output data directory.")
+tf.flags.DEFINE_string("train_image_dir", "/Users/KYD/Downloads/30_collected_train2014",
                        "Training image directory.")
 
 FLAGS = tf.flags.FLAGS
@@ -240,7 +240,7 @@ def main(argv):
     with io.open('/Users/KYD/Dropbox/논문/MSCOCO/captions_train-val2014/annotations/word_to_index_dict.json') as f:
         word2id = json.loads(f.read())
 
-    process_dataset('train', image_metadata, Vocabulary(word2id, len(word2id)), FLAGS.val_shards)
+    process_dataset('train', image_metadata, Vocabulary(word2id, len(word2id)), FLAGS.train_shards)
 
 if __name__ == "__main__":
   tf.app.run()

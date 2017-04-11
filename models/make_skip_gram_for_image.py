@@ -1,4 +1,4 @@
-import numpy as np
+import tensorflow as tf
 
 def make_skip_gram_for_image(images_captions_pairs):
     '''
@@ -10,7 +10,6 @@ def make_skip_gram_for_image(images_captions_pairs):
     '''
     image_word_pairs = []
     for image, captions in images_captions_pairs:
-        captions = np.ndarray(captions).ravel()
         for word in captions:
             images_captions_pairs.append((image, word))
 
