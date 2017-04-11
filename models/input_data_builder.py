@@ -2,22 +2,23 @@ import tensorflow as tf
 from im2txt.ops import image_processing
 from models import make_skip_gram_for_image
 from models import make_batch_input
+from models import make_image_embeddings
+
 '''
 1. TFRecord 불러오기
 2.
-
 '''
 
-tf.flags.DEFINE_string('input_file_pattern', '/Users/KYD/Dropbox/논문/MSCOCO/captions_train-val2014/tfrecord/train_data-0000?-of-00004','input file pattern')
-tf.flags.DEFINE_integer('values_per_shard', 8)
-tf.flags.DEFINE_integer('input_queue_capacity_factor', 16)
-tf.flags.DEFINE_integer('batch_size', 32)
-tf.flags.DEFINE_integer('image_height', 299)
-tf.flags.DEFINE_integer('image_width', 299)
-tf.flags.DEFINE_integer('resize_height', 346)
-tf.flags.DEFINE_integer('resize_width', 346)
-tf.flags.DEFINE_string('image_format', 'jpeg')
-tf.flags.DEFINE_integer('num_preprocess_threads', 4)
+tf.flags.DEFINE_string('input_file_pattern', '/Users/KYD/Downloads/tfrecord/train*','input file pattern')
+tf.flags.DEFINE_integer('values_per_shard', 8, 'values_per_shard')
+tf.flags.DEFINE_integer('input_queue_capacity_factor', 16, 'input_queue_capacity_factor')
+tf.flags.DEFINE_integer('batch_size', 32, 'batch_size')
+tf.flags.DEFINE_integer('image_height', 299, 'image_height')
+tf.flags.DEFINE_integer('image_width', 299, 'image_width')
+tf.flags.DEFINE_integer('resize_height', 346, 'resize_height')
+tf.flags.DEFINE_integer('resize_width', 346, 'resize_width')
+tf.flags.DEFINE_string('image_format', 'jpeg', 'image_format')
+tf.flags.DEFINE_integer('num_preprocess_threads', 4, 'num_preprocess_threads')
 
 class InputDataBuilder:
     def __init__(self):
@@ -74,7 +75,8 @@ class InputDataBuilder:
                 })
 
             encoded_image = context['image/data']
-            captions = sequence['image/caption_ids']
+            #captions = sequence['image/caption_ids']
+            captions = sequence.values()
 
             # 이미지 디코딩 하기
             decoded_image = image_processing.process_image(encoded_image,
@@ -87,10 +89,18 @@ class InputDataBuilder:
                                                            image_format=tf.flags.FLAGS.image_format)
             images_captions_pairs.append([decoded_image, captions])
 
-        skip_gram_pairs = make_skip_gram_for_image(images_captions_pairs)
+        skip_gram_pairs = []
+        for image, captions in images_captions_pairs:
+            for word in captions:
+                skip_gram_pairs.append((image, word))
+
+        print('skip_gram pairs: ', skip_gram_pairs[:])
+        #skip_gram_pairs = make_skip_gram_for_image.make_skip_gram_for_image(images_captions_pairs)
 
         # 배치 입력 만들기
-        self.batch_images, self.batch_contexts = make_batch_input(skip_gram_pairs)
+        self.batch_images, self.batch_contexts = make_batch_input.make_batch_input(skip_gram_pairs)
+
+        self.inception_output, self.image_embeddings = make_image_embeddings.make_image_embeddings(self.batch_images)
 
 
 
