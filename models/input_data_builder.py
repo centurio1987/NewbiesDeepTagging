@@ -3,6 +3,9 @@ from im2txt.ops import image_processing
 from models import make_skip_gram_for_image
 from models import make_batch_input
 from models import make_image_embeddings
+from models import make_image_embeddings_cnn
+import io
+import json
 
 '''
 1. TFRecord 불러오기
@@ -26,6 +29,12 @@ class InputDataBuilder:
         self.batch_contexts = None
         self.batch_images = None
         self.image_embeddings = None
+
+        word2id = dict()
+        with io.open('/Users/KYD/Dropbox/논문/MSCOCO/captions_train-val2014/annotations/word_to_index_dict.json') as f:
+            word2id = json.loads(f.read())
+
+        self.voc_size = len(word2id)
 
     def prefetch_tfrecords(self):
         data_files = tf.gfile.Glob(tf.flags.FLAGS.input_file_pattern)
@@ -94,13 +103,12 @@ class InputDataBuilder:
             for word in captions:
                 skip_gram_pairs.append((image, word))
 
-        print('skip_gram pairs: ', skip_gram_pairs[:])
         #skip_gram_pairs = make_skip_gram_for_image.make_skip_gram_for_image(images_captions_pairs)
 
         # 배치 입력 만들기
         self.batch_images, self.batch_contexts = make_batch_input.make_batch_input(skip_gram_pairs)
 
-        self.inception_output, self.image_embeddings = make_image_embeddings.make_image_embeddings(self.batch_images)
+        self.image_embeddings = make_image_embeddings_cnn.make_image_embeddings_cnn(self.batch_images, self.voc_size)
 
 
 
