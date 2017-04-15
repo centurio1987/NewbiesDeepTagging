@@ -5,6 +5,7 @@ import os
 from im2txt.ops import image_processing
 from models import make_image_embeddings_cnn
 import numpy as np
+from sklearn.preprocessing import OneHotEncoder
 
 
 '''
@@ -12,6 +13,9 @@ import numpy as np
 2. 이미지 디코딩
 3. 스킵그램 페어
 '''
+
+def one_hot(dim, x):
+    return np.identity(dim)[x :x+1]
 
 def load_images(image_metadata_list):
     encoded_images = []
@@ -73,17 +77,19 @@ for image, metadata in image_and_metadata:
         skip_gram_pairs.append((image, words))
         for word in words:
             if word in word2id:
-                labels.append(word2id[word])
+                labels.append([word2id[word]])
                 images.append(image)
                 skip_gram_pairs.append((image, word2id[word]))
             else:
-                labels.append(len(word2id) + 1)
+                labels.append([len(word2id) + 1])
                 images.append(image)
                 skip_gram_pairs.append((image, len(word2id) + 1))
 
-#labels
-print(labels)
-labels = tf.one_hot(labels, voc_size)
+#labels = tf.one_hot(labels, voc_size)
+
+#one_hot_labels = []
+#for i in labels:
+#    one_hot_labels.append(one_hot(len(word2id)+1, i))
 
 X = tf.Variable(images)
 Y = tf.Variable(labels)
@@ -95,25 +101,25 @@ image_embedding = make_image_embeddings_cnn.make_image_embeddings_cnn(X, image_s
 print(image_embedding)
 
 #train
-'''
 nce_weights = tf.Variable(
-    tf.random_uniform([625, voc_size],
+    tf.random_uniform([image_embedding.shape.as_list()[0], image_embedding.shape.as_list()[1]],
                       -1.0, 1.0))
-nce_biases = tf.Variable(tf.zeros([625]))
+
+nce_biases = tf.Variable(tf.zeros(image_embedding.shape.as_list()[0]))
 
 nce_loss = tf.nn.nce_loss(weights=nce_weights, biases=nce_biases,
                  inputs=image_embedding, labels=Y,
                  num_sampled=14, num_classes=voc_size,
                  name='nce_loss')
 
-loss = tf.reduce_mean(nce_loss)
-'''
+cost = tf.reduce_mean(nce_loss)
 
+'''
 cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=image_embedding, labels=Y))
 train_op = tf.train.RMSPropOptimizer(0.001, 0.9).minimize(cost)
 predict_op = tf.argmax(image_embedding, 1)
-
-train_op = tf.train.AdamOptimizer(0.01).minimize(cost)
+'''
+train_op = tf.train.RMSPropOptimizer(0.001, 0.9).minimize(cost)
 
 init = tf.global_variables_initializer()
 
