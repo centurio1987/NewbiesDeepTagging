@@ -2,7 +2,7 @@ import tensorflow as tf
 import io
 import json
 import os
-from im2txt.ops import image_processing
+from im2txt.im2txt.ops import image_processing
 from models import make_image_embeddings_cnn
 import numpy as np
 
@@ -17,7 +17,7 @@ def load_images(image_metadata_list):
     encoded_images = []
     extracted_metadata_by_exist = []
     for image_metadata in image_metadata_list:
-        filename = os.path.join("/Users/KYD/Downloads/30_collected_train2014", image_metadata[1])
+        filename = os.path.join("/home/ubuntu/data/images", image_metadata[1])
         if tf.gfile.Exists(filename):
             with tf.gfile.FastGFile(filename, 'rb') as f:
                 encoded_images.append(f.read())
@@ -44,12 +44,12 @@ def image_data_mapper(image, metadata):
     return image, metadata
 
 image_metadata_list = []
-with io.open('/Users/KYD/Dropbox/논문/MSCOCO/captions_train-val2014/annotations/img_metadata_train.json') as f:
+with io.open('/home/ubuntu/data/metadata/img_metadata_train.json') as f:
     image_metadata_list = json.loads(f.read())
 
 #voc_size
 word2id = dict()
-with io.open('/Users/KYD/Dropbox/논문/MSCOCO/captions_train-val2014/annotations/word_to_index_dict.json') as f:
+with io.open('/home/ubuntu/data/metadata/word_to_index_dict.json') as f:
     word2id = json.loads(f.read())
 voc_size = len(word2id)
 
