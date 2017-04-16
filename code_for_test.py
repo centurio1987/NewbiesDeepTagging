@@ -100,7 +100,20 @@ Y = tf.Variable(labels)
 image_embedding = make_image_embeddings_cnn.make_image_embeddings_cnn(X, image_size=24, voc_size=voc_size)
 print(image_embedding)
 
+w_o = tf.Variable(tf.random_normal(shape=[voc_size, image_embedding.shape.as_list()[1]]))
+bias = tf.Variable(tf.zeros([voc_size]))
+
 #train
+cost = tf.nn.sampled_softmax_loss(weights=w_o,
+                           biases=bias,
+                           labels=Y,
+                           inputs=image_embedding,
+                           num_sampled=14,
+                           num_classes=voc_size,)
+
+
+
+'''
 nce_weights = tf.Variable(
     tf.random_uniform([image_embedding.shape.as_list()[0], image_embedding.shape.as_list()[1]],
                       -1.0, 1.0))
@@ -113,7 +126,7 @@ nce_loss = tf.nn.nce_loss(weights=nce_weights, biases=nce_biases,
                  name='nce_loss')
 
 cost = tf.reduce_mean(nce_loss)
-
+'''
 '''
 cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=image_embedding, labels=Y))
 train_op = tf.train.RMSPropOptimizer(0.001, 0.9).minimize(cost)
