@@ -139,7 +139,7 @@ saver = tf.train.Saver()
 #session
 with tf.Session() as sess:
     saver.restore(sess, 'saved_model/my-model.ckpt')
-    epoch = 100
+    epoch = 50
     batch_size = 10
 
     for current in range(epoch):
